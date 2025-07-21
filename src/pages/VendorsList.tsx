@@ -146,6 +146,16 @@ const VendorsList = () => {
       return;
     }
 
+    // Check if tenant status is active
+    if (tenant?.status === 'inactive') {
+      toast({
+        title: "Error",
+        description: "Cannot add vendors to an inactive tenant. Please activate the tenant first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     console.log("🚀 Starting vendor creation with tenant_id:", tenant.tenant_id);
     console.log("📝 Validated form data being submitted:", newVendor);
     
