@@ -207,10 +207,22 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
       return;
     }
 
-    // Skip geocoding due to API limitations, just use coordinates
-    const coordinateAddress = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
-    setAddress(coordinateAddress);
-    onLocationSelect(lat, lng, coordinateAddress);
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      console.log('🔍 Geocoding status:', status);
+      if (status === 'OK' && results && results[0]) {
+        const formattedAddress = results[0].formatted_address;
+        console.log('📍 Address found:', formattedAddress);
+        setAddress(formattedAddress);
+        onLocationSelect(lat, lng, formattedAddress);
+      } else {
+        console.warn('⚠️ Geocoding failed:', status);
+        // Fallback to coordinates if geocoding fails
+        const coordinateAddress = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+        setAddress(coordinateAddress);
+        onLocationSelect(lat, lng, coordinateAddress);
+      }
+    });
   };
 
   const handleConfirmLocation = () => {
