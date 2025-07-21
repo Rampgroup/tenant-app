@@ -66,7 +66,9 @@ const VendorsList = () => {
         return hasValidData && matchesDomain;
       })
       .map(vendor => ({
-        tenant_id: vendor.vendor_id,
+        tenant_id: vendor.vendor_id, // This is for UI display compatibility
+        actual_tenant_id: vendor.tenant_id, // Preserve the actual tenant_id
+        vendor_id: vendor.vendor_id, // Preserve vendor_id
         tenant_name: vendor.vendor_name,
         domain: vendor.domain,
         address: vendor.address,
@@ -76,7 +78,9 @@ const VendorsList = () => {
         timezone: vendor.timezone,
         status: vendor.status,
         plan_type: vendor.plan_type,
-        app_type: vendor.app_type
+        app_type: vendor.app_type,
+        primary_color: vendor.primary_color,
+        vendor_location: vendor.vendor_location
       }));
 
     console.log("🔍 Transformed vendors for display:", transformedApiVendors);

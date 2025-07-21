@@ -52,7 +52,7 @@ const EditVendor = () => {
         timezone: vendorData.timezone,
         status: vendorData.status,
         plan_type: vendorData.plan_type,
-        tenant_id: tenant?.tenant_id || vendor.tenant_id
+        tenant_id: vendor.actual_tenant_id || vendor.tenant_id // Use actual_tenant_id if available
       };
 
       console.log("📤 Sending update request with vendor_id:", requestPayload.vendor_id);

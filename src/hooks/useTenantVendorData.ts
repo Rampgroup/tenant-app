@@ -32,6 +32,9 @@ export interface VendorData {
   plan_type: string;
   app_type: string;
   time: string;
+  tenant_id: string; // Add tenant_id field
+  vendor_location?: any; // Add vendor_location field
+  password?: string; // API includes password field
 }
 
 interface ApiResponse<T> {
