@@ -236,9 +236,17 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
 
   return (
     <div className="space-y-4">
-      {!isMapLoaded && (
-        <Card>
-          <CardContent className="pt-6">
+      {/* Map container with overlay */}
+      <div className="relative">
+        <div 
+          ref={mapRef} 
+          className="w-full h-64 rounded-lg border border-gray-300 shadow-sm"
+          style={{ minHeight: '256px' }}
+        />
+        
+        {/* Loading overlay */}
+        {!isMapLoaded && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/90 rounded-lg">
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               {isLoading ? (
                 <>
@@ -246,36 +254,29 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
                   <p className="text-sm text-muted-foreground">Loading map...</p>
                 </>
               ) : error ? (
-                <div className="bg-red-50 border border-red-200 rounded-md p-3 w-full">
+                <div className="bg-red-50 border border-red-200 rounded-md p-3 max-w-sm">
                   <p className="text-red-800 text-sm font-medium">Error:</p>
                   <p className="text-red-700 text-sm mt-1">{error}</p>
-                  {error.includes('Multiple map instances') && (
-                    <Button 
-                      onClick={() => window.location.reload()} 
-                      variant="outline" 
-                      size="sm" 
-                      className="mt-2"
-                    >
-                      Refresh Page
-                    </Button>
-                  )}
+                  <Button 
+                    onClick={() => loadMap(defaultApiKey)} 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-2"
+                  >
+                    Retry Loading Map
+                  </Button>
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">Initializing map...</p>
               )}
             </div>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        )}
+      </div>
 
+      {/* Map controls - only show when map is loaded */}
       {isMapLoaded && (
         <>
-          <div 
-            ref={mapRef} 
-            className="w-full h-64 rounded-lg border border-gray-300 shadow-sm"
-            style={{ minHeight: '256px' }}
-          />
-          
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Latitude</Label>
