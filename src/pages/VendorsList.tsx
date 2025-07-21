@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Building2 } from "lucide-react";
+import { Building2, Loader2 } from "lucide-react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useTenantVendorData, VendorData } from "@/hooks/useTenantVendorData";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import VendorsListHeader from "@/components/VendorsListHeader";
 import VendorCard from "@/components/VendorCard";
 
@@ -279,7 +281,38 @@ const VendorsList = () => {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {allVendors.length === 0 ? (
+          {isLoading ? (
+            // Loading skeleton cards
+            Array.from({ length: 4 }).map((_, index) => (
+              <Card key={`vendor-skeleton-${index}`} className="bg-white shadow-md border border-gray-200">
+                <CardHeader className="pb-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Skeleton className="w-12 h-12 rounded-lg" />
+                      <div>
+                        <Skeleton className="h-6 w-32 mb-2" />
+                        <Skeleton className="h-4 w-24" />
+                      </div>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <Skeleton className="h-8 w-16" />
+                      <Skeleton className="h-6 w-16" />
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                  </div>
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </CardContent>
+              </Card>
+            ))
+          ) : allVendors.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <Building2 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">No Vendors Found</h3>
