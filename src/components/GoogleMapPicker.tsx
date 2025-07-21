@@ -198,7 +198,7 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
     googleMarker.setPosition(newPosition);
     googleMap.setCenter(newPosition);
     getAddressFromCoordinates(lat, lng);
-    onLocationSelect(lat, lng, address);
+    // Don't auto-call onLocationSelect - wait for user confirmation
   };
 
   const getAddressFromCoordinates = (lat: number, lng: number) => {
@@ -214,13 +214,13 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
         const formattedAddress = results[0].formatted_address;
         console.log('📍 Address found:', formattedAddress);
         setAddress(formattedAddress);
-        onLocationSelect(lat, lng, formattedAddress);
+        // Don't auto-call onLocationSelect - only update the address display
       } else {
         console.warn('⚠️ Geocoding failed:', status);
         // Fallback to coordinates if geocoding fails
         const coordinateAddress = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
         setAddress(coordinateAddress);
-        onLocationSelect(lat, lng, coordinateAddress);
+        // Don't auto-call onLocationSelect - only update the address display
       }
     });
   };
