@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 declare global {
   interface Window {
     google: typeof google;
+    gm_authFailure?: () => boolean;
   }
 }
 
@@ -76,6 +77,14 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
     setError('');
 
     try {
+      // Suppress Google Maps error popups
+      window.gm_authFailure = () => {
+        console.warn('Google Maps authentication failed - using fallback mode');
+        setError('Google Maps API key requires billing to be enabled. Using coordinate picker mode.');
+        setIsMapLoaded(false);
+        return false;
+      };
+
       // Wait for the map container to be available
       const containerReady = await waitForMapContainer();
       
@@ -92,11 +101,11 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
         globalLoader = null;
         currentApiKey = null;
         
-        // Create new loader with consistent library configuration
+        // Create new loader with minimal configuration to reduce API calls
         globalLoader = new Loader({
           apiKey: trimmedKey,
           version: 'weekly',
-          libraries: ['places', 'geometry']
+          libraries: [] // Don't load geocoding to avoid permission errors
         });
         
         currentApiKey = trimmedKey;
