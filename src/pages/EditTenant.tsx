@@ -53,6 +53,9 @@ const EditTenant = () => {
 
   useEffect(() => {
     if (tenant) {
+      console.log('🔄 Populating edit form with tenant data:', tenant);
+      console.log('📧 Tenant email from API:', tenant.email);
+      
       form.reset({
         tenantName: tenant.tenant_name || "",
         domain: tenant.domain || "",
@@ -64,6 +67,8 @@ const EditTenant = () => {
         status: tenant.status || "active",
         planType: tenant.plan_type || "demo"
       });
+      
+      console.log('✅ Form populated with adminEmail:', form.getValues('adminEmail'));
     }
   }, [tenant, form]);
 
