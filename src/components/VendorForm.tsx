@@ -113,13 +113,13 @@ const VendorForm: React.FC<VendorFormProps> = ({
         ...vendorData.vendor_location,
         latitude: lat.toString(),
         longitude: lng.toString(),
-        vendor_address: address,
+        // Don't update vendor_address - let user enter manually
       }
     });
     setShowMapPicker(false);
     toast({
       title: "Success",
-      description: "Location selected from map",
+      description: "Location coordinates selected from map",
     });
   };
 
