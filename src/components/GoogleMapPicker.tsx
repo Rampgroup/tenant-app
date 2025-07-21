@@ -27,17 +27,18 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
   onLocationSelect,
   initialLat = 17.4482947,
   initialLng = 78.3753447,
-  apiKey = ''
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
   const [selectedLocation, setSelectedLocation] = useState({ lat: initialLat, lng: initialLng });
   const [address, setAddress] = useState('');
-  const [apiKeyInput, setApiKeyInput] = useState(apiKey);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Default API key for demonstration purposes
+  const defaultApiKey = 'AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik';
 
   const waitForMapContainer = async (maxAttempts = 10): Promise<boolean> => {
     for (let i = 0; i < maxAttempts; i++) {
@@ -225,59 +226,27 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
     onLocationSelect(selectedLocation.lat, selectedLocation.lng, address);
   };
 
-  // Auto-load map if API key is provided as prop
+  // Auto-load map on component mount
   useEffect(() => {
-    if (apiKey && apiKey.trim() && !isMapLoaded && !isLoading) {
-      console.log('🚀 Auto-loading map with provided API key');
-      loadMap(apiKey);
+    if (!isMapLoaded && !isLoading) {
+      console.log('🚀 Auto-loading map with default API key');
+      loadMap(defaultApiKey);
     }
-  }, [apiKey]);
+  }, []);
 
   return (
     <div className="space-y-4">
       {!isMapLoaded && (
         <Card>
           <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="apiKey">Google Maps API Key</Label>
-                <Input
-                  id="apiKey"
-                  type="text"
-                  value={apiKeyInput}
-                  onChange={(e) => setApiKeyInput(e.target.value)}
-                  placeholder="Enter your Google Maps API key (e.g., AIzaSy...)"
-                  className="mt-1 font-mono text-sm"
-                />
-                <div className="text-xs text-gray-500 mt-2 space-y-1">
-                  <p>
-                    Get your API key from{' '}
-                    <a 
-                      href="https://developers.google.com/maps/documentation/javascript/get-api-key" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      Google Cloud Console
-                    </a>
-                  </p>
-                  <p className="text-orange-600">
-                    ⚠️ Make sure to enable: Maps JavaScript API & Places API
-                  </p>
-                  <p className="text-blue-600">
-                    💡 Add this domain to your API key restrictions if needed
-                  </p>
-                </div>
-              </div>
-              <Button 
-                onClick={() => loadMap(apiKeyInput)} 
-                className="w-full"
-                disabled={isLoading || !apiKeyInput.trim()}
-              >
-                {isLoading ? "Loading Map..." : "Load Map"}
-              </Button>
-              {error && (
-                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  <p className="text-sm text-muted-foreground">Loading map...</p>
+                </>
+              ) : error ? (
+                <div className="bg-red-50 border border-red-200 rounded-md p-3 w-full">
                   <p className="text-red-800 text-sm font-medium">Error:</p>
                   <p className="text-red-700 text-sm mt-1">{error}</p>
                   {error.includes('Multiple map instances') && (
@@ -291,6 +260,8 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
                     </Button>
                   )}
                 </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">Initializing map...</p>
               )}
             </div>
           </CardContent>
