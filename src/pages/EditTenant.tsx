@@ -59,7 +59,7 @@ const EditTenant = () => {
       form.reset({
         tenantName: tenant.tenant_name || "",
         domain: tenant.domain || "",
-        adminEmail: tenant.email || "",
+        adminEmail: tenant.admin_email || "",
         phoneNumber: tenant.phone_number || "",
         address: tenant.address || "",
         language: tenant.language || "en",
