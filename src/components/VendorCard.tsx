@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface Vendor {
   tenant_id: string;
+  actual_tenant_id?: string;
   tenant_name: string;
   domain: string;
   address: string;
@@ -169,7 +170,7 @@ const VendorCard = ({ vendor }: VendorCardProps) => {
           isInactive ? 'text-gray-400' : 'text-gray-600'
         }`}>
           <Building2 className={`h-4 w-4 ${isInactive ? 'text-gray-400' : 'text-cyan-500'}`} />
-          <span className="text-sm font-medium">Tenant ID: {vendor.tenant_id}</span>
+          <span className="text-sm font-medium">Tenant ID: {vendor.actual_tenant_id || vendor.tenant_id}</span>
         </div>
         
         <div className="pt-2 border-t border-gray-100">
