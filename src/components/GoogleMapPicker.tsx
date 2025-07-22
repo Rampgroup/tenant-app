@@ -325,7 +325,7 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
             </p>
           </div>
 
-          <Button onClick={handleConfirmLocation} className="w-full">
+          <Button onClick={handleConfirmLocation} className="w-full bg-green-600 hover:bg-green-700">
             Confirm Location
           </Button>
         </>
