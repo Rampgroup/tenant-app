@@ -272,7 +272,28 @@ const VendorForm: React.FC<VendorFormProps> = ({
                   readOnly
                 />
               </div>
+            </div>
 
+            {/* Confirm Location Button */}
+            <div className="flex justify-center">
+              <Button
+                type="button"
+                variant={vendorData.vendor_location?.latitude && vendorData.vendor_location?.longitude ? "default" : "outline"}
+                className={vendorData.vendor_location?.latitude && vendorData.vendor_location?.longitude 
+                  ? "bg-green-600 hover:bg-green-700 text-white" 
+                  : "text-muted-foreground"
+                }
+                disabled={!vendorData.vendor_location?.latitude || !vendorData.vendor_location?.longitude}
+              >
+                <MapPin className="h-4 w-4 mr-2" />
+                {vendorData.vendor_location?.latitude && vendorData.vendor_location?.longitude 
+                  ? "Location Confirmed" 
+                  : "Confirm Location"
+                }
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="vendorAddress">Vendor Address</Label>
                 <Input
