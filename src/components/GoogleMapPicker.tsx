@@ -28,6 +28,7 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
   onLocationSelect,
   initialLat = 17.4482947,
   initialLng = 78.3753447,
+  apiKey,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -38,8 +39,8 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Default API key for demonstration purposes
-  const defaultApiKey = 'AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik';
+  // Load API key from environment variables
+  const defaultApiKey = import.meta.env.VITE_GOOGLE_MAPS_KEY || '';
 
   const waitForMapContainer = async (maxAttempts = 10): Promise<boolean> => {
     for (let i = 0; i < maxAttempts; i++) {
@@ -242,7 +243,7 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
   useEffect(() => {
     if (!isMapLoaded && !isLoading) {
       console.log('🚀 Auto-loading map with default API key');
-      loadMap(defaultApiKey);
+      loadMap(apiKey || defaultApiKey);
     }
   }, []);
 
@@ -269,8 +270,8 @@ const GoogleMapPicker: React.FC<GoogleMapPickerProps> = ({
                 <div className="bg-red-50 border border-red-200 rounded-md p-3 max-w-sm">
                   <p className="text-red-800 text-sm font-medium">Error:</p>
                   <p className="text-red-700 text-sm mt-1">{error}</p>
-                  <Button 
-                    onClick={() => loadMap(defaultApiKey)} 
+                  <Button
+                    onClick={() => loadMap(apiKey || defaultApiKey)}
                     variant="outline" 
                     size="sm" 
                     className="mt-2"

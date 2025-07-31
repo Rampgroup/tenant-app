@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 export interface TenantData {
@@ -33,7 +33,12 @@ export interface VendorData {
   app_type: string;
   time: string;
   tenant_id: string; // Add tenant_id field
-  vendor_location?: any; // Add vendor_location field
+  vendor_location?: {
+    latitude: string;
+    longitude: string;
+    vendor_address?: string;
+    address_name?: string;
+  };
   password?: string; // API includes password field
 }
 
@@ -64,12 +69,12 @@ export function useTenantVendorData(type: 'vendor', tenantId?: string): {
 };
 
 export function useTenantVendorData(type: 'tenant' | 'vendor', tenantId?: string) {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<(TenantData | VendorData)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -113,11 +118,11 @@ export function useTenantVendorData(type: 'tenant' | 'vendor', tenantId?: string
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [tenantId, type, toast]);
 
   useEffect(() => {
     fetchData();
-  }, [type, tenantId]);
+  }, [fetchData]);
 
   const refetch = () => {
     fetchData();
