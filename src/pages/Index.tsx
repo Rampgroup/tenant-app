@@ -11,7 +11,29 @@ import { useTenantVendorData, TenantData } from "@/hooks/useTenantVendorData";
 const Index = () => {
   const navigate = useNavigate();
   const { data: apiTenants, isLoading, error, refetch } = useTenantVendorData('tenant');
-  const [allTenants, setAllTenants] = useState<any[]>([]);
+
+  interface DisplayTenant {
+    tenant_id: string;
+    role_id: string;
+    tenant_name: string;
+    domain: string;
+    admin_email: string;
+    phone_number: string;
+    address: string;
+    logo_url: string;
+    primary_color: string;
+    language: string;
+    timezone: string;
+    status: string;
+    modules_enabled: string[];
+    db_schema_name: string;
+    plan_type: string;
+    created_by: string;
+    created_at: string;
+    updated_at: string;
+  }
+
+  const [allTenants, setAllTenants] = useState<DisplayTenant[]>([]);
   const [totalVendors, setTotalVendors] = useState<number>(0);
 
   useEffect(() => {
@@ -99,12 +121,12 @@ const Index = () => {
     }
   };
 
-  const handleTenantClick = (tenant: any) => {
+  const handleTenantClick = (tenant: DisplayTenant) => {
     // Navigate to vendors list for this tenant's domain
     navigate(`/vendors/${tenant.domain.toLowerCase()}`, { state: { tenant } });
   };
 
-  const handleEditTenant = (tenant: any, e: React.MouseEvent) => {
+  const handleEditTenant = (tenant: DisplayTenant, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click
     navigate('/edit-tenant', { state: { tenant } });
   };

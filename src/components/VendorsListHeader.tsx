@@ -24,9 +24,13 @@ interface VendorFormData {
   };
 }
 
+interface TenantInfo {
+  tenant_name: string;
+}
+
 interface VendorsListHeaderProps {
   domain?: string;
-  tenant?: any;
+  tenant?: TenantInfo;
   isLoading: boolean;
   error: string | null;
   onBackClick: () => void;

@@ -9,7 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 
 // Updated products data for different domains
-const domainProducts = {
+interface Product {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+}
+
+const domainProducts: Record<string, Product[]> = {
   farming: [
     { id: 1, name: "Urea Fertilizer", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop", price: 450 },
     { id: 2, name: "NPK (Nitrogen, Phosphorus, Potassium)", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&h=200&fit=crop", price: 650 },
@@ -78,7 +85,7 @@ const DomainLanding = () => {
     return item ? item.quantity : 0;
   };
 
-  const addToCart = (product: any) => {
+  const addToCart = (product: Product) => {
     updateQuantity(product.id, 1);
     toast({
       title: "Added to Cart",
